@@ -33,7 +33,11 @@ namespace Services
 
 
             var CountedProducts = Products.Count();
-            return new PaginatedResult<ProductDto>(productQuery.PageIndex, CountedProducts , 0 , MapperProducts);
+
+            var CountSpec = new ProductCountSpecification(productQuery);
+
+            var TotalCount =await  _Repository.CountAsync(CountSpec);
+            return new PaginatedResult<ProductDto>(productQuery.PageIndex, CountedProducts , TotalCount , MapperProducts);
 
         }
 
