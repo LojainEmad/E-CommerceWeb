@@ -22,6 +22,12 @@ namespace Persistence
             if(Spec.Criteria is not null)
                 Query = Query.Where(Spec.Criteria);
 
+            if(Spec.OrderBy is not null)
+                Query = Query.OrderBy(Spec.OrderBy);
+
+            if(Spec.OrderByDesc is  not null)
+                Query=Query.OrderByDescending(Spec.OrderByDesc);
+
             if(Spec.IncludeExpressions is not null && Spec.IncludeExpressions.Count > 0)
                 //aggregate => but string in one sequence
                 Query = Spec.IncludeExpressions.Aggregate(Query, (currentQuery, Exp) => currentQuery.Include(Exp));

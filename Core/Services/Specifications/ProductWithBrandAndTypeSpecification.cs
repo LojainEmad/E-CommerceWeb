@@ -1,4 +1,5 @@
 ﻿using Domain.Models.Products;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,30 @@ namespace Services.Specifications
     public class ProductWithBrandAndTypeSpecification:BaseSpecifications<Product , int>
     {
         //where(true && true)
-        public ProductWithBrandAndTypeSpecification(int? brandId, int? TypeId)
+        public ProductWithBrandAndTypeSpecification(int? brandId, int? TypeId , ProductSortingOptions sortingOption)
             :base(P=>(!brandId.HasValue || P.BrandId==brandId) 
                   && (!TypeId.HasValue ||P.TypeId ==TypeId))
         {
             AddInclude(P => P.Brand);
             AddInclude(P=>P.Type);
+
+            switch (sortingOption)
+            {
+                case ProductSortingOptions.NameAsc:
+                    AddOrderBy(P => P.Name);
+                    break;
+                case ProductSortingOptions.NameDesc:
+                    AddOrderByDesc(P => P.Name);
+                    break;
+                case ProductSortingOptions.PriceAsc:
+                    AddOrderBy(P => P.Price);
+                    break;
+                case ProductSortingOptions.PriceDesc:
+                    AddOrderByDesc(P => P.Price);
+                    break;
+                default:
+                    break;
+            }
 
         }
 
