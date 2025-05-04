@@ -38,6 +38,8 @@ namespace Services.Specifications
                     break;
             }
 
+            ApplyPagination(productQuery.PageSize, productQuery.PageIndex);
+
         }
 
         public ProductWithBrandAndTypeSpecification(int id):base(P=>P.Id==id)
