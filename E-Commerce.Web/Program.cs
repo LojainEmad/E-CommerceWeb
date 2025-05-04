@@ -1,9 +1,15 @@
+using Abstraction;
+using Domain.Contracts;
+using Microsoft.EntityFrameworkCore;
+using Persistence.Data;
+using Persistence.Repositories;
+using Services;
 
 namespace E_Commerce.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +21,25 @@ namespace E_Commerce.Web
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddAutoMapper(typeof(AssemblyReferences).Assembly);
+            builder.Services.AddScoped<IServicesManager,ServicesManager>(); 
+
+
+
+            builder.Services.AddDbContext<StoreDBContext>(options =>
+            {
+                var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                options.UseSqlServer(ConnectionString);
+            });
             #endregion
 
             var app = builder.Build();
+
+            await InitializeDbAsync(app);
+
 
             #region MiddleWares -Configure Pipelines
             // Configure the HTTP request pipeline. 
@@ -28,6 +50,7 @@ namespace E_Commerce.Web
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
@@ -37,5 +60,14 @@ namespace E_Commerce.Web
 
             app.Run();
         }
+
+        public static async Task InitializeDbAsync(WebApplication app)
+        {
+
+            using var scope = app.Services.CreateScope();
+            var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+            await dbInitializer.InitializeAsync();
+        }
+
     }
 }
