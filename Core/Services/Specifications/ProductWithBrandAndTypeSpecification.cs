@@ -13,7 +13,9 @@ namespace Services.Specifications
         //where(true && true)
         public ProductWithBrandAndTypeSpecification(ProductQueryParams productQuery)
             :base(P=>(!productQuery.BrandId.HasValue || P.BrandId== productQuery.BrandId) 
-                  && (!productQuery.TypeId.HasValue ||P.TypeId == productQuery.TypeId))
+                  && (!productQuery.TypeId.HasValue ||P.TypeId == productQuery.TypeId)
+                  && (string.IsNullOrEmpty(productQuery.SearchValue)||P.Name.ToLower().Contains(productQuery.SearchValue.ToLower()) ))
+                  
         {
             AddInclude(P => P.Brand);
             AddInclude(P=>P.Type);
