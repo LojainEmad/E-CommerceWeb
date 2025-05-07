@@ -10,5 +10,8 @@ namespace Abstraction
     {
         public IProductServices ProductServices { get; }
 
+        public IBasketServices BasketServices { get; }
+
+
     }
 }
