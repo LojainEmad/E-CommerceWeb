@@ -67,7 +67,7 @@ namespace E_Commerce.Web
             {
                 var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(ConnectionString);
-            },
+            }
             );
             #endregion
 
