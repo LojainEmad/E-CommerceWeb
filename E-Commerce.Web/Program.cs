@@ -7,6 +7,7 @@ using Persistence.Data;
 using Persistence.Repositories;
 using Services;
 using Shared.ErrorModels;
+using StackExchange.Redis;
 
 namespace E_Commerce.Web
 {
@@ -51,6 +52,14 @@ namespace E_Commerce.Web
                 };
             });
 
+            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
+            builder.Services.AddSingleton<IConnectionMultiplexer>((_) =>
+
+            {
+                return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnectionString"));
+            });
+
 
 
 
@@ -58,7 +67,8 @@ namespace E_Commerce.Web
             {
                 var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(ConnectionString);
-            });
+            },
+            );
             #endregion
 
             var app = builder.Build();
