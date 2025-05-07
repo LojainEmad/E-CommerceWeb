@@ -69,6 +69,15 @@ namespace E_Commerce.Web
                 options.UseSqlServer(ConnectionString);
             }
             );
+
+
+            builder.Services.AddDbContext<StoreIdentityDbContext>(options =>
+            {
+                var ConnectionString = builder.Configuration.GetConnectionString("IdentityConnection");
+                options.UseSqlServer(ConnectionString);
+            }
+            );
+
             #endregion
 
             var app = builder.Build();
