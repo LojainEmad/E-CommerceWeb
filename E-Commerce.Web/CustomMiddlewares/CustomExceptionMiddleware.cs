@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Domain.Exceptions;
+using Microsoft.Extensions.Logging;
 using Shared.ErrorModels;
 using System.Diagnostics;
 using System.Text.Json;
@@ -31,7 +32,11 @@ namespace E_Commerce.Web.CustomMiddlewares
 
                 //Set Status Code For Response 
 
-                httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                httpContext.Response.StatusCode = ex switch
+                {
+                    NotFoundException =>StatusCodes.Status404NotFound,
+                    _=> StatusCodes.Status500InternalServerError,
+                };
 
                 //Set Content Type for Response
                 httpContext.Response.ContentType= "application/json";
