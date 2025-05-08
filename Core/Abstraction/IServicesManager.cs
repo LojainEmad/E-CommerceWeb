@@ -12,6 +12,8 @@ namespace Abstraction
 
         public IBasketServices BasketServices { get; }
 
+        public IAuthenticationServices AuthenticationServices { get; }
+
 
     }
 }
