@@ -106,8 +106,9 @@ namespace E_Commerce.Web
             app.UseStaticFiles();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
-
+            app.UseRouting();
             app.MapControllers();
             #endregion
 

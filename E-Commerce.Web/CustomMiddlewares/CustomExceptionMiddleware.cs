@@ -48,7 +48,7 @@ namespace E_Commerce.Web.CustomMiddlewares
                 //Response object
                 var Response = new ErrorToReturn()
                 {
-                    StatusCode = httpContext.Response.StatusCode,
+                    //StatusCode = httpContext.Response.StatusCode,
                     ErrorMessage = ex.Message,
                 };
 
@@ -56,7 +56,8 @@ namespace E_Commerce.Web.CustomMiddlewares
 
                 //Set Status Code For Response 
 
-                httpContext.Response.StatusCode = ex switch
+                //httpContext.Response.StatusCode = ex switch
+                Response.StatusCode = ex switch
                 {
                     NotFoundException =>StatusCodes.Status404NotFound,
                     UnAuthorizedException =>StatusCodes.Status401Unauthorized,
