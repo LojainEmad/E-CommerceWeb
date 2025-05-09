@@ -1,6 +1,8 @@
 using Abstraction;
 using Domain.Contracts;
+using Domain.Models.Identity;
 using E_Commerce.Web.CustomMiddlewares;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
@@ -69,6 +71,20 @@ namespace E_Commerce.Web
                 options.UseSqlServer(ConnectionString);
             }
             );
+
+
+
+            //Security 
+            builder.Services.AddDbContext<StoreIdentityDbContext>(options =>
+            {
+                var ConnectionString = builder.Configuration.GetConnectionString("IdentityConnection");
+                options.UseSqlServer(ConnectionString);
+            }
+            );
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<StoreIdentityDbContext>();
+
             #endregion
 
             var app = builder.Build();
@@ -90,8 +106,9 @@ namespace E_Commerce.Web
             app.UseStaticFiles();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
-
+            app.UseRouting();
             app.MapControllers();
             #endregion
 
@@ -104,6 +121,7 @@ namespace E_Commerce.Web
             using var scope = app.Services.CreateScope();
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
             await dbInitializer.InitializeAsync();
+            await dbInitializer.IdentityInitializerAsync();
         }
 
     }

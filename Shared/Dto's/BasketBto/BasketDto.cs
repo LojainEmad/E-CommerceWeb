@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models.Basket
+namespace Shared.Dto_s.BasketBto
 {
-    public class CustomerBasket
+    public class BasketDto
     {
         public string Id { get; set; }
-        public ICollection<BasketItem> Items { get; set; } = [];
-
-
+        public ICollection<BasketItemDto> Items { get; set; } = [];
     }
 }
